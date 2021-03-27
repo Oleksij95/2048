@@ -15,6 +15,10 @@ export default createStore({
     },
     setElPosition(state, position) {
       state.close_position.push(position)
+    },
+    resetGame(state) {
+      state.close_position = [],
+      state.current_score = 0
     }
   },
 
@@ -24,6 +28,9 @@ export default createStore({
     },
     setPosition({commit}, position) {
       commit('setElPosition', position)
+    },
+    celarGame({commit}) {
+      commit('resetGame')
     }
   },
 

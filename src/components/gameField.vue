@@ -85,13 +85,10 @@ export default {
         },
 
         celarGame() {
-            this.close_position = [];
+            this.$store.dispatch("celarGame");
             document.getElementById("gameGeneretedElements").innerHTML = ""
         },
 
-        moveBlock() {
-            console.log("move!!!")
-        }
     },
     mounted() {
         this.startGame()
