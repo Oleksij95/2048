@@ -22,9 +22,24 @@
             <div class="gridRow" v-for="i in gameSize" :key="i">
                 <div class="gridColumn" v-for="j in gameSize" :key="j"></div>
             </div>
-            <div class="gameGeneretedElements" id="gameGeneretedElements"></div>
+            <div class="gameGeneretedElements" id="gameGeneretedElements">
+                <!-- <div title="4" x="2" y="1" class="g_el position_2_2">4</div>
+                <div title="4" x="2" y="4" class="g_el position_2_2">4</div> -->
+
+
+                <div title="2" x="1" y="3" class="g_el position_1_3">2</div>
+                <div title="2" x="1" y="4" class="g_el position_1_4">2</div>
+                <div title="2" x="1" y="2" class="g_el position_1_2">2</div>
+                <div title="2" x="1" y="1" class="g_el position_1_1">2</div>
+               
+
+
+                <!-- <div title="2" x="3" y="1" class="g_el position_3_1">2</div>
+                <div title="2" x="4" y="3" class="g_el position_4_3">2</div>
+                <div title="2" x="4" y="4" class="g_el position_4_4">2</div> -->
+            </div>
         </div>
-        
+    
         
     </div>
 </template>
@@ -33,7 +48,7 @@
 export default {
 
     data: () => ({
-        rand_value: [2, 4],
+        rand_value: [2, 4]
     }),
 
     computed: {
@@ -54,9 +69,9 @@ export default {
 
     methods: {
         startGame () {
-            this.celarGame()
-            this.generateEl()
-            this.generateEl()
+            // this.celarGame()
+            // this.generateEl()
+            // this.generateEl()
         },
 
         generateEl() {
@@ -68,14 +83,61 @@ export default {
 
             if (!this.closePosition.includes("position_" + rand_x + "_" + rand_y)) {
                 new_el.innerHTML = this.rand_value[this.getRandomIntInclusive(0, this.rand_value.length - 1)];
+                new_el.title = new_el.innerText
+                new_el.setAttribute("x", rand_x)
+                new_el.setAttribute("y", rand_y)
                 new_el.className = "g_el position_" + rand_x + "_" + rand_y;
                 el_wrapper.append(new_el);
-                console.log("push: " + "position_" + rand_x + "_" + rand_y);
                 this.$store.dispatch("setPosition", "position_" + rand_x + "_" + rand_y);
             } else { 
                 this.generateEl();
             }
+        },
 
+        move(to) {
+            
+            let gridRow = document.querySelectorAll(".gridRow")
+           
+            for (let i = 0; i < gridRow.length; i++) {
+                let row_els = document.querySelectorAll(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "']");
+                let row_els_arr = Array.prototype.slice.call(row_els, 0);
+                row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(a.getAttribute("y")) - parseFloat(b.getAttribute("y")) })
+
+                if (to === "toLeft") {
+                    for (let el = 0; el < row_els_arr.length; el++) {
+                        let y = 4;
+                        let current_el = row_els_arr[el];
+                        let current_el_y = parseInt(current_el.getAttribute("y"))
+                        while (y >= 1) {
+                            if (y < current_el_y) {
+                                let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "'][y='" + y + "']")
+                                if (prev_el === null) {
+                                    current_el.setAttribute("y", y)
+                                }
+                                if (prev_el) {
+                                    let prev_el_value = parseInt(prev_el.innerText)
+                                    let prev_el_y = parseInt(prev_el.getAttribute("y"))
+                                    if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
+                                        current_el.setAttribute("y", prev_el_y)
+                                        prev_el.remove()
+                                        current_el.classList.add("be_apply")
+                                        current_el.innerText = parseInt(current_el.innerText) * 2
+                                        this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
+                                        current_el.setAttribute("title", parseInt(current_el.innerText))
+                                        break
+                                    } else {
+                                        break
+                                    }
+                                }
+                            }
+                            current_el.classList.remove("be_apply");
+                            y--;
+                        }
+                    }
+                }
+
+            }
+            // this.generateEl()
         },
 
         getRandomIntInclusive(min, max) {
@@ -94,16 +156,16 @@ export default {
         this.startGame()
         window.addEventListener('keyup', (e) => {
             if (e.code === "ArrowLeft") {
-                this.generateEl()
+                this.move("toLeft")
             }
             if (e.code === "ArrowRight") {
-                this.generateEl()
+                this.move("toRight")
             }
             if (e.code === "ArrowUp") {
-                this.generateEl()
+                this.move("toUp")
             }
             if (e.code === "ArrowDown") {
-                this.generateEl()
+                this.move("toDown")
             }
         });
     }
@@ -213,61 +275,96 @@ export default {
         font-weight: bold;
         z-index: 10;
         font-size: 55px;
+        transition: all .3s;
         color: #8f7a66;
     }
+    .g_el[title="4"]{
+        background: #eee1c9;
+    }
+    .g_el[title="8"]{
+        background: #f3b27a;
+    }
+    .g_el[title="16"]{
+        background: #eee1c9;
+    }
+    .g_el[title="32"]{
+        background: #f77c5f;
+    }
+    .g_el[title="64"]{
+        background: #f75f3b;
+    }
+    .g_el[title="128"]{
+        background: #edd073;
+    }
 
-    .position_1_1{
+    
+    .g_el[x="1"][y="1"]{
         transform: translate(0px, 0px);
     }
-    .position_1_2{
+
+    .g_el[x="1"][y="2"]{
         transform: translate(128px, 0px);
     }
-    .position_1_3{
+
+    .g_el[x="1"][y="3"]{
         transform: translate(256px, 0px);
     }
-    .position_1_4{
-        transform: translate(384px, 0px);
+
+    .g_el[x="1"][y="4"]{
+       transform: translate(384px, 0px);
     }
 
 
-    .position_2_1{
+    .g_el[x="2"][y="1"]{
         transform: translate(0px, 129px);
     }
-    .position_2_2{
+
+    .g_el[x="2"][y="2"]{
         transform: translate(128px, 129px);
     }
-    .position_2_3{
+
+    .g_el[x="2"][y="3"]{
         transform: translate(256px, 129px);
     }
-    .position_2_4{
-        transform: translate(384px, 129px);
+
+    .g_el[x="2"][y="4"]{
+       transform: translate(384px, 129px);
     }
 
 
-    .position_3_1{
+    .g_el[x="3"][y="1"]{
         transform: translate(0px, 257px);
     }
-    .position_3_2{
+
+    .g_el[x="3"][y="2"]{
         transform: translate(128px, 257px);
     }
-    .position_3_3{
+
+    .g_el[x="3"][y="3"]{
         transform: translate(256px, 257px);
     }
-    .position_3_4{
-        transform: translate(384px, 257px);
+
+    .g_el[x="3"][y="4"]{
+       transform: translate(384px, 257px);
     }
 
 
-    .position_4_1{
+
+    .g_el[x="4"][y="1"]{
         transform: translate(0px, 386px);
     }
-    .position_4_2{
+
+    .g_el[x="4"][y="2"]{
         transform: translate(128px, 386px);
     }
-    .position_4_3{
+
+    .g_el[x="4"][y="3"]{
         transform: translate(256px, 386px);
     }
-    .position_4_4{
-        transform: translate(384px, 386px);
+
+    .g_el[x="4"][y="4"]{
+       transform: translate(384px, 386px);
     }
+
+
 </style>

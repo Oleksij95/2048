@@ -19,6 +19,12 @@ export default createStore({
     resetGame(state) {
       state.close_position = [],
       state.current_score = 0
+    },
+    changeELPosition(state, value){
+      state.close_position = value
+    },
+    setCurrentScore(state, score) {
+      state.current_score += score
     }
   },
 
