@@ -23,20 +23,31 @@
                 <div class="gridColumn" v-for="j in gameSize" :key="j"></div>
             </div>
             <div class="gameGeneretedElements" id="gameGeneretedElements">
-                <!-- <div title="4" x="2" y="1" class="g_el position_2_2">4</div>
-                <div title="4" x="2" y="4" class="g_el position_2_2">4</div> -->
+                
 
 
-                <div title="2" x="1" y="3" class="g_el position_1_3">2</div>
-                <div title="4" x="1" y="4" class="g_el position_1_4">4</div>
-                <div title="4" x="1" y="2" class="g_el position_1_2">4</div>
-                <div title="2" x="1" y="1" class="g_el position_1_1">2</div>
+                
+
+
+                <div title="2" x="3" y="1" class="g_el position_3_1">4</div>
+                <div title="2" x="1" y="1" class="g_el position_2_1">2</div>
+                <div title="2" x="2" y="1" class="g_el position_1_1">2</div>
+                <div title="2" x="4" y="1" class="g_el position_1_1">2</div>
+
+
+                
+                <div title="2" x="1" y="2" class="g_el position_1_1">2</div>
+
+                <div title="2" x="1" y="3" class="g_el position_1_1">2</div>
+                <div title="2" x="4" y="3" class="g_el position_1_1">4</div>
+
+                <div title="2" x="2" y="4" class="g_el position_1_1">2</div>
+                <div title="2" x="3" y="4" class="g_el position_1_1">4</div>
+
                
 
 
-                <!-- <div title="2" x="3" y="1" class="g_el position_3_1">2</div>
-                <div title="2" x="4" y="3" class="g_el position_4_3">2</div>
-                <div title="2" x="4" y="4" class="g_el position_4_4">2</div> -->
+        
             </div>
         </div>
     
@@ -98,78 +109,136 @@ export default {
             
             let gridRow = document.querySelectorAll(".gridRow")
            
-            for (let i = 0; i < gridRow.length; i++) {
-                let row_els = document.querySelectorAll(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "']");
-                let row_els_arr = Array.prototype.slice.call(row_els, 0);
-                
-                if (to === "toLeft") {
-                    row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(a.getAttribute("y")) - parseFloat(b.getAttribute("y")) })
-                    for (let el = 0; el < row_els_arr.length; el++) {
-                        let y = 4;
-                        let current_el = row_els_arr[el];
-                        let current_el_y = parseInt(current_el.getAttribute("y"))
-                        while (y >= 1) {
-                            if (y < current_el_y) {
-                                let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "'][y='" + y + "']")
-                                if (prev_el === null) {
-                                    current_el.setAttribute("y", y)
-                                }
-                                if (prev_el) {
-                                    let prev_el_value = parseInt(prev_el.innerText)
-                                    let prev_el_y = parseInt(prev_el.getAttribute("y"))
-                                    if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
-                                        current_el.setAttribute("y", prev_el_y)
-                                        prev_el.remove()
-                                        current_el.classList.add("be_apply")
-                                        current_el.innerText = parseInt(current_el.innerText) * 2
-                                        this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
-                                        current_el.setAttribute("title", parseInt(current_el.innerText))
-                                        break
-                                    } else {
-                                        break
+
+            if (to === "toLeft" || to === "toRight") {
+                for (let i = 0; i < gridRow.length; i++) {
+                    let row_els = document.querySelectorAll(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "']");
+                    let row_els_arr = Array.prototype.slice.call(row_els, 0);
+                    
+                    if (to === "toLeft") {
+                        row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(a.getAttribute("y")) - parseFloat(b.getAttribute("y")) })
+                        for (let el = 0; el < row_els_arr.length; el++) {
+                            let y = 4;
+                            let current_el = row_els_arr[el];
+                            let current_el_y = parseInt(current_el.getAttribute("y"))
+                            while (y >= 1) {
+                                if (y < current_el_y) {
+                                    let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "'][y='" + y + "']")
+                                    if (prev_el === null) {
+                                        current_el.setAttribute("y", y)
+                                    }
+                                    if (prev_el) {
+                                        let prev_el_value = parseInt(prev_el.innerText)
+                                        let prev_el_y = parseInt(prev_el.getAttribute("y"))
+                                        if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
+                                            current_el.setAttribute("y", prev_el_y)
+                                            prev_el.remove()
+                                            current_el.classList.add("be_apply")
+                                            current_el.innerText = parseInt(current_el.innerText) * 2
+                                            this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
+                                            current_el.setAttribute("title", parseInt(current_el.innerText))
+                                            break
+                                        } else {
+                                            break
+                                        }
                                     }
                                 }
+                                current_el.classList.remove("be_apply");
+                                y--;
                             }
-                            current_el.classList.remove("be_apply");
-                            y--;
                         }
                     }
-                }
 
-                if (to === "toRight") {
-                    row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(b.getAttribute("y")) - parseFloat(a.getAttribute("y")) })
-                    for (let el = 0; el < row_els_arr.length; el++) {
-                        let y = 1;
-                        let current_el = row_els_arr[el];
-                        let current_el_y = parseInt(current_el.getAttribute("y"))
-                        while (y <= 4) {
-                            if (y > current_el_y) {
-                                let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "'][y='" + y + "']")
-                                if (prev_el === null) {
-                                    current_el.setAttribute("y", y)
-                                }
-                                if (prev_el) {
-                                    let prev_el_value = parseInt(prev_el.innerText)
-                                    let prev_el_y = parseInt(prev_el.getAttribute("y"))
-                                    if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
-                                        current_el.setAttribute("y", prev_el_y)
-                                        prev_el.remove()
-                                        current_el.classList.add("be_apply")
-                                        current_el.innerText = parseInt(current_el.innerText) * 2
-                                        this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
-                                        current_el.setAttribute("title", parseInt(current_el.innerText))
-                                        break
-                                    } else {
-                                        break
+                    if (to === "toRight") {
+                        row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(b.getAttribute("y")) - parseFloat(a.getAttribute("y")) })
+                        for (let el = 0; el < row_els_arr.length; el++) {
+                            let y = 1;
+                            let current_el = row_els_arr[el];
+                            let current_el_y = parseInt(current_el.getAttribute("y"))
+                            while (y <= 4) {
+                                if (y > current_el_y) {
+                                    let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "'][y='" + y + "']")
+                                    if (prev_el === null) {
+                                        current_el.setAttribute("y", y)
+                                    }
+                                    if (prev_el) {
+                                        let prev_el_value = parseInt(prev_el.innerText)
+                                        let prev_el_y = parseInt(prev_el.getAttribute("y"))
+                                        if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
+                                            current_el.setAttribute("y", prev_el_y)
+                                            prev_el.remove()
+                                            current_el.classList.add("be_apply")
+                                            current_el.innerText = parseInt(current_el.innerText) * 2
+                                            this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
+                                            current_el.setAttribute("title", parseInt(current_el.innerText))
+                                            break
+                                        } else {
+                                            break
+                                        }
                                     }
                                 }
+                                current_el.classList.remove("be_apply");
+                                y++;
                             }
-                            current_el.classList.remove("be_apply");
-                            y++;
                         }
                     }
                 }
             }
+
+            if (to === "toDown" || to === "toUp") {
+                for (let i = 4; i >= 1; i--) {
+                    let row_els = document.querySelectorAll(".gameGeneretedElements .g_el[y='" + parseInt(i) + "']");
+                    let row_els_arr = Array.prototype.slice.call(row_els, 0);
+                    row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(b.getAttribute("x")) - parseFloat(a.getAttribute("x")) })
+            
+                    if (to === "toDown") {
+
+
+                        for (let el = 0; el < row_els_arr.length; el++) {
+                            let x = 1;
+                            let current_el = row_els_arr[el];
+                            
+                            while (x <= 4) {
+                                let current_el_x = parseInt(current_el.getAttribute("x"))
+                                let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(current_el_x + 1) + "'][y='" + i + "']")
+                                
+                                if (prev_el === null && current_el_x < x) {
+                                    current_el.setAttribute("x", parseInt(x))
+                                }
+
+                                if (prev_el){
+                                    let prev_el_value = parseInt(prev_el.innerText)
+                                    let current_el_value = parseInt(current_el.innerText)
+                                    if (prev_el_value === current_el_value && !prev_el.classList.contains("be_apply")) {
+                                        current_el.innerText = parseInt(current_el.innerText) * 2
+                                        current_el.setAttribute("x", parseInt(prev_el.getAttribute("x")))
+                                        prev_el.remove()
+                                        current_el.classList.add("be_apply")
+                                        break
+                                    } else {
+                                        break
+                                    }
+                                
+                                }
+                                current_el.classList.remove("be_apply");
+                                x++
+                            }
+                            
+                        }
+
+                    }
+                    
+
+
+
+
+
+
+                }
+            }
+
+
+
             // this.generateEl()
         },
 
