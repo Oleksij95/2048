@@ -49,12 +49,15 @@ export default {
         },
         closePosition() {
             return this.$store.getters.close_position
+        },
+        gameStatus() {
+            return this.$store.getters.game_status
         }
     },
 
 
     methods: {
-        startGame () {
+        startNewGame () {
             this.celarGame()
             this.generateEl()
             this.generateEl()
@@ -66,7 +69,7 @@ export default {
                 document.querySelector("#gameGeneretedElements").innerHTML = save_game_object.blocks_string
                 this.$store.dispatch('setSaveGame', save_game_object)
             } else {
-                this.startGame()
+                this.startNewGame()
             }
         },
 
@@ -304,7 +307,12 @@ export default {
 
     },
     mounted() {
-        this.loadGame()
+        if (this.gameStatus === "continue_game") {
+            this.loadGame()
+        } else {
+            this.startNewGame()
+        }
+        
         window.addEventListener('keyup', (e) => {
             if (e.code === "ArrowLeft") {
                 this.move("toLeft")

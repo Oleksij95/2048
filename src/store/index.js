@@ -6,7 +6,7 @@ export default createStore({
     game_size: 4,
     best_score: 0,
     current_score: 0,
-    close_position: []
+    close_position: [],
   },
 
   mutations: {
@@ -36,7 +36,7 @@ export default createStore({
   },
 
   actions: {
-    startNewGame({commit}, game_status) {
+    setGameStatus({commit}, game_status) {
       commit('setGameStatus', game_status)
     },
     setPosition({commit}, position) {
@@ -58,7 +58,7 @@ export default createStore({
     game_size: s => s.game_size,
     best_score: s => s.best_score,
     current_score: s => s.current_score,
-    close_position: s => s.close_position
+    close_position: s => s.close_position,
   },
 
   modules: {

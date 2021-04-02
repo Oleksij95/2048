@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
 
-    <!-- <Menu v-if="gameStatus === 'menu'"/> -->
-    <!-- <gameField v-if="gameStatus === 'new_game'"/> -->
-    <gameField></gameField>
+    <Menu v-if="gameStatus === 'menu'"/>
+    <gameField v-if="gameStatus === 'new_game' || gameStatus === 'continue_game'" />
+    <!-- <gameField></gameField> -->
   </div>
 </template>
 

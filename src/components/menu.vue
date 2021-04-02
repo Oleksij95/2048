@@ -1,19 +1,34 @@
 <template>
     <div class="menu">
         <div class="menu_item" @click="startNewGame()">Новая игра</div>
-        <div class="menu_item disabled">Продолжить</div>
+        <div class="menu_item"
+            :class="{disabled: !saved}"
+            @click="continueGame()"
+        >Продолжить</div>
         <div class="menu_item">Рекорд</div>
+        <div class="menu_item">Настройки</div>
         <div class="menu_item">О программе</div>
     </div>
 </template>
 
 <script>
 export default {
-   methods: {
-       startNewGame(){
-           this.$store.dispatch('startNewGame', "new_game")
-       }
-   }
+    data: () => ({
+        saved: false
+    }),
+    mounted() {
+        if (localStorage.getItem('saved_game')) {
+            this.saved = true
+        }
+    },
+    methods: {
+        startNewGame(){
+            this.$store.dispatch('setGameStatus', "new_game")
+        },
+        continueGame() {
+            this.$store.dispatch('setGameStatus', "continue_game")
+        }
+    }
 }
 </script>
 
