@@ -24,25 +24,8 @@
             </div>
             <div class="gameGeneretedElements" id="gameGeneretedElements">
 
-                <!-- <div title="128" x="4" y="3" class="g_el position_2_2">128</div>
-                <div title="64" x="4" y="4" class="g_el position_1_2">64</div>
-                <div title="2" x="3" y="2" class="g_el position_3_4">2</div>
-                <div title="8" x="3" y="3" class="g_el position_2_4">8</div>
-                <div title="16" x="4" y="1" class="g_el position_1_1">16</div>
-                <div title="8" x="3" y="1" class="g_el position_1_3">8</div>
-                <div title="4" x="1" y="2" class="g_el position_1_2">4</div>
-                <div title="64" x="4" y="2" class="g_el position_1_3">64</div>
-                <div title="2" x="2" y="3" class="g_el position_2_4">2</div>
-                <div title="8" x="2" y="2" class="g_el position_2_2">8</div>
-                <div title="4" x="2" y="1" class="g_el position_1_3 be_apply">4</div>
-                <div title="4" x="3" y="4" class="g_el position_1_4">4</div>
-                <div title="4" x="1" y="1" class="g_el position_1_1">4</div> -->
-
             </div>
         </div>
-
-        
-    
         
     </div>
 </template>
@@ -77,6 +60,16 @@ export default {
             this.generateEl()
         },
 
+        loadGame() {
+            if (localStorage.getItem("saved_game")) {
+                let save_game_object = JSON.parse(localStorage.getItem("saved_game"))
+                document.querySelector("#gameGeneretedElements").innerHTML = save_game_object.blocks_string
+                this.$store.dispatch('setSaveGame', save_game_object)
+            } else {
+                this.startGame()
+            }
+        },
+
         generateEl() {
             let el_wrapper = new_el = null;
             let rand_x = this.getRandomIntInclusive(1, this.gameSize)
@@ -102,7 +95,6 @@ export default {
             let gridRow = document.querySelectorAll(".gridRow");
             let was_movement = false;
            
-
             if (to === "toLeft" || to === "toRight") {
                 for (let i = 0; i < gridRow.length; i++) {
                     let row_els = document.querySelectorAll(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "']");
@@ -164,9 +156,7 @@ export default {
                                         if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
                                             current_el.setAttribute("y", prev_el_y)
                                             was_movement = true
-
                                             prev_el.remove()
-
                                             current_el.classList.add("be_apply")
                                             current_el.innerText = parseInt(current_el.innerText) * 2
                                             this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
@@ -203,7 +193,6 @@ export default {
                             }
                             if (prev_el){
                                 let prev_el_value = parseInt(prev_el.innerText)
-                            
                                 let current_el_value = parseInt(current_el.innerText)
                                 if (prev_el_value === current_el_value && !prev_el.classList.contains("be_apply")) {
                                     current_el.innerText = parseInt(current_el.innerText) * 2
@@ -265,6 +254,7 @@ export default {
             }
 
             this.setState()
+
             if (was_movement ) {
                 setTimeout(() => {
                     this.generateEl()
@@ -274,19 +264,31 @@ export default {
         setState() {
             let current_state_elements = document.querySelectorAll("#gameGeneretedElements .g_el")
             let new_el_array = [];
+            let setting_save_game = true // добаить в меню настроек
             for (let i = 0; i < current_state_elements.length; i++) {
                 let el_x = parseInt(current_state_elements[i].getAttribute("x"))
                 let el_y = parseInt(current_state_elements[i].getAttribute("y"))
                 new_el_array.push("position_" + el_x + "_" + el_y)
-
-                 console.log(current_state_elements[i])
 
                 if (current_state_elements[i].classList.contains("be_apply")) {
                    
                     current_state_elements[i].classList.remove("be_apply")
                 }
             }
-            this.$store.dispatch("setNewStateElements", new_el_array)
+            this.$store.dispatch("setNewStateElements", new_el_array);
+
+            if (setting_save_game) {
+                
+                setTimeout(() => {
+                    let save_game = {}
+                    let blocks_string = document.querySelector("#gameGeneretedElements").innerHTML
+                    save_game.blocks_string = blocks_string
+                    save_game.score = this.currentScore
+                    localStorage.setItem("saved_game", JSON.stringify(save_game))
+                }, 300)
+               
+            }
+            
         },
 
         getRandomIntInclusive(min, max) {
@@ -302,7 +304,7 @@ export default {
 
     },
     mounted() {
-        this.startGame()
+        this.loadGame()
         window.addEventListener('keyup', (e) => {
             if (e.code === "ArrowLeft") {
                 this.move("toLeft")
@@ -531,7 +533,6 @@ export default {
     .g_el[x="3"][y="4"]{
        transform: translate(385px, 257px);
     }
-
 
     .g_el[x="4"][y="1"]{
         transform: translate(0px, 386px);
