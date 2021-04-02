@@ -28,8 +28,8 @@
 
 
                 <div title="2" x="1" y="3" class="g_el position_1_3">2</div>
-                <div title="2" x="1" y="4" class="g_el position_1_4">2</div>
-                <div title="2" x="1" y="2" class="g_el position_1_2">2</div>
+                <div title="4" x="1" y="4" class="g_el position_1_4">4</div>
+                <div title="4" x="1" y="2" class="g_el position_1_2">4</div>
                 <div title="2" x="1" y="1" class="g_el position_1_1">2</div>
                
 
@@ -101,9 +101,9 @@ export default {
             for (let i = 0; i < gridRow.length; i++) {
                 let row_els = document.querySelectorAll(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "']");
                 let row_els_arr = Array.prototype.slice.call(row_els, 0);
-                row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(a.getAttribute("y")) - parseFloat(b.getAttribute("y")) })
-
+                
                 if (to === "toLeft") {
+                    row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(a.getAttribute("y")) - parseFloat(b.getAttribute("y")) })
                     for (let el = 0; el < row_els_arr.length; el++) {
                         let y = 4;
                         let current_el = row_els_arr[el];
@@ -136,6 +136,39 @@ export default {
                     }
                 }
 
+                if (to === "toRight") {
+                    row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(b.getAttribute("y")) - parseFloat(a.getAttribute("y")) })
+                    for (let el = 0; el < row_els_arr.length; el++) {
+                        let y = 1;
+                        let current_el = row_els_arr[el];
+                        let current_el_y = parseInt(current_el.getAttribute("y"))
+                        while (y <= 4) {
+                            if (y > current_el_y) {
+                                let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "'][y='" + y + "']")
+                                if (prev_el === null) {
+                                    current_el.setAttribute("y", y)
+                                }
+                                if (prev_el) {
+                                    let prev_el_value = parseInt(prev_el.innerText)
+                                    let prev_el_y = parseInt(prev_el.getAttribute("y"))
+                                    if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
+                                        current_el.setAttribute("y", prev_el_y)
+                                        prev_el.remove()
+                                        current_el.classList.add("be_apply")
+                                        current_el.innerText = parseInt(current_el.innerText) * 2
+                                        this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
+                                        current_el.setAttribute("title", parseInt(current_el.innerText))
+                                        break
+                                    } else {
+                                        break
+                                    }
+                                }
+                            }
+                            current_el.classList.remove("be_apply");
+                            y++;
+                        }
+                    }
+                }
             }
             // this.generateEl()
         },
