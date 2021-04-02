@@ -25,6 +25,13 @@ export default createStore({
     },
     setCurrentScore(state, score) {
       state.current_score += score
+    },
+    removeElInPosition(state, position){
+      state.close_position[position] = null;
+    },
+    setElements(state, elements){
+      state.close_position = [];
+      state.close_position = elements
     }
   },
 
@@ -37,6 +44,12 @@ export default createStore({
     },
     celarGame({commit}) {
       commit('resetGame')
+    },
+    removeElInPosition({commit}, position) {
+      commit('removeElInPosition', position)
+    },
+    setNewStateElements({commit}, elements_array) {
+      commit('setElements', elements_array)
     }
   },
 

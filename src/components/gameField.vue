@@ -23,33 +23,25 @@
                 <div class="gridColumn" v-for="j in gameSize" :key="j"></div>
             </div>
             <div class="gameGeneretedElements" id="gameGeneretedElements">
-                
 
+                <!-- <div title="128" x="4" y="3" class="g_el position_2_2">128</div>
+                <div title="64" x="4" y="4" class="g_el position_1_2">64</div>
+                <div title="2" x="3" y="2" class="g_el position_3_4">2</div>
+                <div title="8" x="3" y="3" class="g_el position_2_4">8</div>
+                <div title="16" x="4" y="1" class="g_el position_1_1">16</div>
+                <div title="8" x="3" y="1" class="g_el position_1_3">8</div>
+                <div title="4" x="1" y="2" class="g_el position_1_2">4</div>
+                <div title="64" x="4" y="2" class="g_el position_1_3">64</div>
+                <div title="2" x="2" y="3" class="g_el position_2_4">2</div>
+                <div title="8" x="2" y="2" class="g_el position_2_2">8</div>
+                <div title="4" x="2" y="1" class="g_el position_1_3 be_apply">4</div>
+                <div title="4" x="3" y="4" class="g_el position_1_4">4</div>
+                <div title="4" x="1" y="1" class="g_el position_1_1">4</div> -->
 
-                
-
-
-                <div title="2" x="3" y="1" class="g_el position_3_1">4</div>
-                <div title="2" x="1" y="1" class="g_el position_2_1">2</div>
-                <div title="2" x="2" y="1" class="g_el position_1_1">2</div>
-                <div title="2" x="4" y="1" class="g_el position_1_1">2</div>
-
-
-                
-                <div title="2" x="1" y="2" class="g_el position_1_1">2</div>
-
-                <div title="2" x="1" y="3" class="g_el position_1_1">2</div>
-                <div title="2" x="4" y="3" class="g_el position_1_1">4</div>
-
-                <div title="2" x="2" y="4" class="g_el position_1_1">2</div>
-                <div title="2" x="3" y="4" class="g_el position_1_1">4</div>
-
-               
-
-
-        
             </div>
         </div>
+
+        
     
         
     </div>
@@ -80,9 +72,9 @@ export default {
 
     methods: {
         startGame () {
-            // this.celarGame()
-            // this.generateEl()
-            // this.generateEl()
+            this.celarGame()
+            this.generateEl()
+            this.generateEl()
         },
 
         generateEl() {
@@ -107,7 +99,8 @@ export default {
 
         move(to) {
             
-            let gridRow = document.querySelectorAll(".gridRow")
+            let gridRow = document.querySelectorAll(".gridRow");
+            let was_movement = false;
            
 
             if (to === "toLeft" || to === "toRight") {
@@ -125,14 +118,17 @@ export default {
                                 if (y < current_el_y) {
                                     let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "'][y='" + y + "']")
                                     if (prev_el === null) {
-                                        current_el.setAttribute("y", y)
+                                        current_el.setAttribute("y", y);
+                                        was_movement = true
                                     }
                                     if (prev_el) {
                                         let prev_el_value = parseInt(prev_el.innerText)
                                         let prev_el_y = parseInt(prev_el.getAttribute("y"))
                                         if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
                                             current_el.setAttribute("y", prev_el_y)
+                                            was_movement = true
                                             prev_el.remove()
+
                                             current_el.classList.add("be_apply")
                                             current_el.innerText = parseInt(current_el.innerText) * 2
                                             this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
@@ -160,13 +156,17 @@ export default {
                                     let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(i + 1) + "'][y='" + y + "']")
                                     if (prev_el === null) {
                                         current_el.setAttribute("y", y)
+                                        was_movement = true
                                     }
                                     if (prev_el) {
                                         let prev_el_value = parseInt(prev_el.innerText)
                                         let prev_el_y = parseInt(prev_el.getAttribute("y"))
                                         if (prev_el_value === parseInt(current_el.innerText) && !prev_el.classList.contains("be_apply")) {
                                             current_el.setAttribute("y", prev_el_y)
+                                            was_movement = true
+
                                             prev_el.remove()
+
                                             current_el.classList.add("be_apply")
                                             current_el.innerText = parseInt(current_el.innerText) * 2
                                             this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
@@ -185,61 +185,108 @@ export default {
                 }
             }
 
-            if (to === "toDown" || to === "toUp") {
+            if (to === "toDown") {
                 for (let i = 4; i >= 1; i--) {
                     let row_els = document.querySelectorAll(".gameGeneretedElements .g_el[y='" + parseInt(i) + "']");
                     let row_els_arr = Array.prototype.slice.call(row_els, 0);
                     row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(b.getAttribute("x")) - parseFloat(a.getAttribute("x")) })
-            
-                    if (to === "toDown") {
-
-
-                        for (let el = 0; el < row_els_arr.length; el++) {
-                            let x = 1;
-                            let current_el = row_els_arr[el];
-                            
-                            while (x <= 4) {
-                                let current_el_x = parseInt(current_el.getAttribute("x"))
-                                let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(current_el_x + 1) + "'][y='" + i + "']")
-                                
-                                if (prev_el === null && current_el_x < x) {
-                                    current_el.setAttribute("x", parseInt(x))
-                                }
-
-                                if (prev_el){
-                                    let prev_el_value = parseInt(prev_el.innerText)
-                                    let current_el_value = parseInt(current_el.innerText)
-                                    if (prev_el_value === current_el_value && !prev_el.classList.contains("be_apply")) {
-                                        current_el.innerText = parseInt(current_el.innerText) * 2
-                                        current_el.setAttribute("x", parseInt(prev_el.getAttribute("x")))
-                                        prev_el.remove()
-                                        current_el.classList.add("be_apply")
-                                        break
-                                    } else {
-                                        break
-                                    }
-                                
-                                }
-                                current_el.classList.remove("be_apply");
-                                x++
+    
+                    for (let el = 0; el < row_els_arr.length; el++) {
+                        let x = 1;
+                        let current_el = row_els_arr[el];
+                        while (x <= 4) {
+                            let current_el_x = parseInt(current_el.getAttribute("x"))
+                            let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(current_el_x + 1) + "'][y='" + i + "']")
+                            if (prev_el === null && current_el_x < x) {
+                                current_el.setAttribute("x", parseInt(x))
+                                was_movement = true
                             }
+                            if (prev_el){
+                                let prev_el_value = parseInt(prev_el.innerText)
                             
+                                let current_el_value = parseInt(current_el.innerText)
+                                if (prev_el_value === current_el_value && !prev_el.classList.contains("be_apply")) {
+                                    current_el.innerText = parseInt(current_el.innerText) * 2
+                                    current_el.setAttribute("x", parseInt(prev_el.getAttribute("x")))
+                                    was_movement = true
+                                    prev_el.remove()
+                                    current_el.classList.add("be_apply")
+                                    this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
+                                    current_el.setAttribute("title", parseInt(current_el.innerText))
+                                    break
+                                } else {
+                                    break
+                                }
+                            }
+                            current_el.classList.remove("be_apply");
+                            x++
                         }
-
                     }
-                    
-
-
-
-
-
-
                 }
             }
 
 
+            if (to === "toUp") {
+                for (let i = 1; i <= 4; i++) {
+                    let row_els = document.querySelectorAll(".gameGeneretedElements .g_el[y='" + parseInt(i) + "']");
+                    let row_els_arr = Array.prototype.slice.call(row_els, 0);
+                    row_els_arr = row_els_arr.sort((a, b) => { return parseFloat(a.getAttribute("x")) - parseFloat(b.getAttribute("x")) })
+                    for (let el = 0; el < row_els_arr.length; el++) {
+                        let x = 4;
+                        let current_el = row_els_arr[el];
+                        while (x >= 1) {
+                            let current_el_x = parseInt(current_el.getAttribute("x"))
+                            let prev_el = document.querySelector(".gameGeneretedElements .g_el[x='" + parseInt(current_el_x - 1) + "'][y='" + i + "']")
+                            if (prev_el === null && current_el_x > x) {
+                                current_el.setAttribute("x", parseInt(x))
+                                was_movement = true
+                            }
+                            if (prev_el){
+                                let prev_el_value = parseInt(prev_el.innerText)
+                                let current_el_value = parseInt(current_el.innerText)
+                                if (prev_el_value === current_el_value && !prev_el.classList.contains("be_apply")) {
+                                    current_el.innerText = parseInt(current_el.innerText) * 2
+                                    current_el.setAttribute("x", parseInt(prev_el.getAttribute("x")))
+                                    was_movement = true
+                                    prev_el.remove()
+                                    current_el.classList.add("be_apply")
+                                    this.$store.commit("setCurrentScore", parseInt(current_el.innerText))
+                                    current_el.setAttribute("title", parseInt(current_el.innerText))
+                                    break
+                                } else {
+                                    break
+                                }
+                            }
+                            x--;
+                        }
+                        current_el.classList.remove("be_apply");
+                    }
+                }
+            }
 
-            // this.generateEl()
+            this.setState()
+            if (was_movement ) {
+                setTimeout(() => {
+                    this.generateEl()
+                }, 200)
+            }
+        },
+        setState() {
+            let current_state_elements = document.querySelectorAll("#gameGeneretedElements .g_el")
+            let new_el_array = [];
+            for (let i = 0; i < current_state_elements.length; i++) {
+                let el_x = parseInt(current_state_elements[i].getAttribute("x"))
+                let el_y = parseInt(current_state_elements[i].getAttribute("y"))
+                new_el_array.push("position_" + el_x + "_" + el_y)
+
+                 console.log(current_state_elements[i])
+
+                if (current_state_elements[i].classList.contains("be_apply")) {
+                   
+                    current_state_elements[i].classList.remove("be_apply")
+                }
+            }
+            this.$store.dispatch("setNewStateElements", new_el_array)
         },
 
         getRandomIntInclusive(min, max) {
@@ -377,7 +424,7 @@ export default {
         font-weight: bold;
         z-index: 10;
         font-size: 55px;
-        transition: all .3s;
+        transition: all .15s;
         color: #8f7a66;
     }
     .g_el[title="4"]{
@@ -385,18 +432,53 @@ export default {
     }
     .g_el[title="8"]{
         background: #f3b27a;
+        color: #fff;
     }
     .g_el[title="16"]{
-        background: #eee1c9;
+        background: #f69664;
+        color: #fff;
     }
     .g_el[title="32"]{
         background: #f77c5f;
+        color: #fff;
     }
     .g_el[title="64"]{
         background: #f75f3b;
+        color: #fff;
     }
     .g_el[title="128"]{
         background: #edd073;
+        color: #fff;
+    }
+    
+    .g_el[title="256"]{
+        background: #edcc62;
+        color: #fff;
+    }
+    .g_el[title="512"]{
+        color: #fff;
+        background: #edc950;
+        box-shadow: 0 0 30px 10px rgb(243, 215, 116 / 40%), inset 0 0 0 1px rgb(255, 255, 255 / 24%);
+    }
+    .g_el[title="1024"]{
+        color: #f9f6f2;
+        background: #edc53f;
+        box-shadow: 0 0 30px 10px rgb(243, 215, 116 / 48%), inset 0 0 0 1px rgb(255, 255, 255 / 29%);
+        font-size: 41px;
+    }
+
+    .g_el[title="2048"]{
+        color: #f9f6f2;
+        background: #edc22e;
+        box-shadow: 0 0 30px 10px rgb(243, 215, 116 / 48%), inset 0 0 0 1px rgb(255, 255, 255 / 29%);
+        font-size: 41px;
+    }
+
+    .g_el[title="4096"]{
+        color: #fff;
+        background: #9e0c0c;
+        box-shadow: 0 0 30px 10px rgb(243, 215, 116 / 48%), inset 0 0 0 1px rgb(255, 255, 255 / 29%);
+        font-size: 41px;
     }
 
     
@@ -426,7 +508,7 @@ export default {
     }
 
     .g_el[x="2"][y="3"]{
-        transform: translate(256px, 129px);
+        transform: translate(257px, 129px);
     }
 
     .g_el[x="2"][y="4"]{
@@ -447,9 +529,8 @@ export default {
     }
 
     .g_el[x="3"][y="4"]{
-       transform: translate(384px, 257px);
+       transform: translate(385px, 257px);
     }
-
 
 
     .g_el[x="4"][y="1"]{
@@ -461,7 +542,7 @@ export default {
     }
 
     .g_el[x="4"][y="3"]{
-        transform: translate(256px, 386px);
+        transform: translate(257px, 386px);
     }
 
     .g_el[x="4"][y="4"]{
