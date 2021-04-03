@@ -5,9 +5,9 @@
             :class="{disabled: !saved}"
             @click="continueGame()"
         >Продолжить</div>
-        <div class="menu_item">Рекорд</div>
+        <div class="menu_item" @click="showRecord()">Рекорд</div>
         <div class="menu_item">Настройки</div>
-        <div class="menu_item">О программе</div>
+        <div class="menu_item" @click="showAbout()">О программе</div>
     </div>
 </template>
 
@@ -22,11 +22,17 @@ export default {
         }
     },
     methods: {
-        startNewGame(){
+        startNewGame() {
             this.$store.dispatch('setGameStatus', "new_game")
         },
         continueGame() {
             this.$store.dispatch('setGameStatus', "continue_game")
+        },
+        showRecord() {
+            this.$store.dispatch('setGameStatus', "record")
+        },
+        showAbout() {
+            this.$store.dispatch('setGameStatus', "about")
         }
     }
 }

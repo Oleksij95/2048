@@ -1,22 +1,32 @@
 <template>
   <div class="wrapper">
+    <menuIcon v-if="gameStatus !== 'menu'" />
 
-    <Menu v-if="gameStatus === 'menu'"/>
+    <Menu v-if="gameStatus === 'menu'" />
     <gameField v-if="gameStatus === 'new_game' || gameStatus === 'continue_game'" />
+    <Record v-if="gameStatus === 'record'"/>
+    <About v-if="gameStatus === 'about'" />
     <!-- <gameField></gameField> -->
   </div>
 </template>
 
 <script>
 
+import menuIcon from './components/menuIcon'
 import Menu from './components/menu'
 import gameField from './components/gameField'
+import Record from './components/record'
+import About from './components/about'
+
 
 export default {
   name: 'App',
   components: {
     Menu,
-    gameField
+    gameField,
+    Record,
+    menuIcon,
+    About
   },
   computed: {
     gameStatus () {

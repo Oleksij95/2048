@@ -1,5 +1,13 @@
 <template @keyup="moveBlock()">
     <div class="game_wrapper">
+        <!-- <div class="menu_block" @click="showMenu()">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            menu
+        </div> -->
         <div class="game_wrapper_top">
             <h2>2048</h2>
             <div class="game_wrapper_score">
@@ -15,7 +23,7 @@
         </div>
 
         <div class="restart_wrapper">
-            <div class="restart" @click="startGame()">New Game</div>
+            <div class="restart" @click="startNewGame()">New Game</div>
         </div>
 
         <div class="gameTablet">
@@ -303,8 +311,7 @@ export default {
         celarGame() {
             this.$store.dispatch("celarGame");
             document.getElementById("gameGeneretedElements").innerHTML = ""
-        },
-
+        }
     },
     mounted() {
         if (this.gameStatus === "continue_game") {
@@ -332,6 +339,7 @@ export default {
 </script>
 
 <style lang="scss">
+
     .game_wrapper_top{
         display: flex;
         justify-content: space-between;
