@@ -6,7 +6,7 @@
             @click="continueGame()"
         >Продолжить</div>
         <div class="menu_item" @click="showRecord()">Рекорд</div>
-        <div class="menu_item">Настройки</div>
+        <div class="menu_item" @click="showSettings()">Настройки</div>
         <div class="menu_item" @click="showAbout()">О программе</div>
     </div>
 </template>
@@ -33,6 +33,9 @@ export default {
         },
         showAbout() {
             this.$store.dispatch('setGameStatus', "about")
+        },
+        showSettings() {
+            this.$store.dispatch('setGameStatus', "settings")
         }
     }
 }

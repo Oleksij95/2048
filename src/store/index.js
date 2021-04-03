@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    game_status: "menu",
+    game_status: "settings",
     game_size: 4,
     best_score: 0,
     current_score: 0,

@@ -6,6 +6,7 @@
     <gameField v-if="gameStatus === 'new_game' || gameStatus === 'continue_game'" />
     <Record v-if="gameStatus === 'record'"/>
     <About v-if="gameStatus === 'about'" />
+    <Settings v-if="gameStatus === 'settings'" />
     <!-- <gameField></gameField> -->
   </div>
 </template>
@@ -17,6 +18,7 @@ import Menu from './components/menu'
 import gameField from './components/gameField'
 import Record from './components/record'
 import About from './components/about'
+import Settings from './components/settings'
 
 
 export default {
@@ -26,7 +28,8 @@ export default {
     gameField,
     Record,
     menuIcon,
-    About
+    About,
+    Settings
   },
   computed: {
     gameStatus () {
@@ -50,6 +53,7 @@ body{
   .wrapper{
     width: 530px;
     margin: auto;
+    padding: 0 15px;
   }
 }
 </style>
