@@ -25,7 +25,6 @@ export default {
     color: #483e34;
     font-weight: 600;
     position: relative;
-    margin-top: 25px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -42,6 +41,14 @@ export default {
         }
         &:nth-child(3){
             margin-top: 5px;
+        }
+    }
+}
+.black_theme{
+    .menu_block{
+        color: #fff;
+        span{
+            background: #fff;
         }
     }
 }

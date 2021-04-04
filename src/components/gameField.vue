@@ -566,5 +566,8 @@ export default {
        transform: translate(384px, 386px);
     }
 
+.black_theme .game_wrapper_top h2{
+    color: #fff;
+}
 
 </style>

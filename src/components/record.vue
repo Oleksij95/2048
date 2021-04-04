@@ -31,4 +31,11 @@
             line-height: 20px;
         }
     }
+    .black_theme{
+        .record_wrapper{
+            h1, p{
+                color: #fff;
+            }
+        }
+    }
 </style>

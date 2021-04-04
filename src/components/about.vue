@@ -25,4 +25,11 @@
             line-height: 30px;
         }
     }
+    .black_theme{
+        .about_wrapper{
+            h1, p{
+                color: #fff;
+            }
+        }
+    }
 </style>

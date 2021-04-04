@@ -2,8 +2,9 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
-    game_status: "settings",
+    game_status: "menu",
     game_size: 4,
+    game_theme: 'white',
     best_score: 0,
     current_score: 0,
     close_position: [],
@@ -32,6 +33,9 @@ export default createStore({
     },
     setGame(state, game){
       state.current_score = game.score
+    },
+    setGameTheme(state, theme){
+      state.game_theme = theme
     }
   },
 
@@ -50,12 +54,16 @@ export default createStore({
     },
     setSaveGame({commit}, game) {
       commit('setGame', game)
+    },
+    changeGameTheme({commit}, theme){
+      commit('setGameTheme', theme)
     }
   },
 
   getters: {
     game_status: s => s.game_status,
     game_size: s => s.game_size,
+    game_theme: s => s.game_theme,
     best_score: s => s.best_score,
     current_score: s => s.current_score,
     close_position: s => s.close_position,

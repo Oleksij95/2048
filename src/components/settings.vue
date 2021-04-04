@@ -1,15 +1,16 @@
 <template>
     <div class="settings_wrapper">
         <h1>Настройки:</h1>
+
         <div class="setting">
             <p class="title">Тема</p>
             <div class="radio_wrapper">
-                <input type="radio" name="theme" id="white" value="white" checked>
+                <input type="radio" name="theme" id="white" value="white" checked @click="setGameTheme('white')">
                 <label for="white">Светлая</label>
             </div>
 
             <div class="radio_wrapper">
-                <input type="radio" name="theme" id="black" value="black">
+                <input type="radio" name="theme" id="black" value="black" @click="setGameTheme('black')">
                 <label for="black">Темная</label>
             </div>
         </div>
@@ -26,7 +27,6 @@
                 <input type="radio" name="size" id="big" value="big">
                 <label for="big">8x8</label>
             </div>
-
         </div>
 
     </div>
@@ -34,7 +34,11 @@
 
 <script>
     export default {
-       
+       methods: {
+            setGameTheme(theme) {
+                this.$store.dispatch('changeGameTheme', theme)
+            }
+       }
     }
 </script>
 
@@ -72,6 +76,26 @@
         }
         p.title{
             font-size: 25px;
+        }
+    }
+    .black_theme{
+        .settings_wrapper{
+            &.in_progress{
+                &::before{
+                    background: rgba(76, 76, 76, 80%);
+                }
+            }
+            h1{
+                color: #fff;
+            }
+            .setting{
+                label{
+                    color: #fff;
+                }
+                p{
+                    color: #fff;
+                }
+            }
         }
     }
 </style>
