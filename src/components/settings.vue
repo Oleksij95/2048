@@ -5,12 +5,12 @@
         <div class="setting">
             <p class="title">Тема</p>
             <div class="radio_wrapper">
-                <input type="radio" name="theme" id="white" value="white" checked @click="setGameTheme('white')">
+                <input type="radio" name="theme" id="white" value="white" :checked="gameTheme === 'white'" @click="setGameTheme('white')">
                 <label for="white">Светлая</label>
             </div>
 
             <div class="radio_wrapper">
-                <input type="radio" name="theme" id="black" value="black" @click="setGameTheme('black')">
+                <input type="radio" name="theme" id="black" value="black" :checked="gameTheme === 'black'" @click="setGameTheme('black')">
                 <label for="black">Темная</label>
             </div>
         </div>
@@ -34,11 +34,16 @@
 
 <script>
     export default {
-       methods: {
+        computed:{
+            gameTheme() {
+                return this.$store.getters.game_theme
+            }
+        },
+        methods: {
             setGameTheme(theme) {
                 this.$store.dispatch('changeGameTheme', theme)
             }
-       }
+        }
     }
 </script>
 

@@ -68,4 +68,9 @@ export default {
             }
         }
     }
+    .black_theme {
+        .menu_item{
+            color: #fff;
+        }
+    }
 </style>
