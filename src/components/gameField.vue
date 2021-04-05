@@ -76,6 +76,7 @@ export default {
                 let save_game_object = JSON.parse(localStorage.getItem("saved_game"))
                 document.querySelector("#gameGeneretedElements").innerHTML = save_game_object.blocks_string
                 this.$store.dispatch('setSaveGame', save_game_object)
+                this.$store.dispatch('setNewStateElements', save_game_object.close_position)
             } else {
                 this.startNewGame()
             }
@@ -280,13 +281,16 @@ export default {
                 let el_x = parseInt(current_state_elements[i].getAttribute("x"))
                 let el_y = parseInt(current_state_elements[i].getAttribute("y"))
                 new_el_array.push("position_" + el_x + "_" + el_y)
-
                 if (current_state_elements[i].classList.contains("be_apply")) {
-                   
                     current_state_elements[i].classList.remove("be_apply")
                 }
             }
+
             this.$store.dispatch("setNewStateElements", new_el_array);
+
+            if (this.bestScore < this.currentScore) {
+                this.$store.commit("setBestScore", this.currentScore)
+            }
 
             if (setting_save_game) {
                 
@@ -295,9 +299,10 @@ export default {
                     let blocks_string = document.querySelector("#gameGeneretedElements").innerHTML
                     save_game.blocks_string = blocks_string
                     save_game.score = this.currentScore
+                    save_game.best_score = this.$store.getters.best_score
+                    save_game.close_position = this.$store.getters.close_position
                     localStorage.setItem("saved_game", JSON.stringify(save_game))
                 }, 300)
-               
             }
             
         },

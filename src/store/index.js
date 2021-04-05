@@ -27,12 +27,16 @@ export default createStore({
     setCurrentScore(state, score) {
       state.current_score += score
     },
+    setBestScore(state, best_score) {
+      state.best_score = best_score
+    },
     setElements(state, elements){
       state.close_position = [];
       state.close_position = elements
     },
     setGame(state, game){
       state.current_score = game.score
+      state.best_score = game.best_score
     },
     setGameTheme(state, theme){
       state.game_theme = theme

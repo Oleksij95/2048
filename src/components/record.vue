@@ -9,6 +9,10 @@
     export default {
         computed: {
             recordScore () {
+                if (localStorage.getItem("saved_game")) {
+                    let save_game_object = JSON.parse(localStorage.getItem("saved_game"))
+                    return save_game_object.best_score
+                }
                 return this.$store.getters.best_score
             }
         }
